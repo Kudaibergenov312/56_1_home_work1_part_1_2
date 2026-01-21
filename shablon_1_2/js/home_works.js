@@ -39,7 +39,7 @@ window.addEventListener('load', () => {
         }
         else if (direction === 'up') {
             y--
-            if (y <= 0) return //
+
         }
 
         child.style.left = x + 'px'

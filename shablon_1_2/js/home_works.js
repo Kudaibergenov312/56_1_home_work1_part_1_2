@@ -17,20 +17,64 @@ window.addEventListener('load', () => {
     const parent = document.querySelector('.parent_block')
     const child = document.querySelector('.child_block')
 
-    if (!parent || !child) {
-        console.error('Blocks not found')
-        return
-    }
-
-    let position = 0
+    let x = 0
+    let y = 0
+    let direction = 'right'
 
     const moveBlock = () => {
-        if (position <= parent.clientWidth - child.clientWidth) {
-            child.style.left = position + 'px'
-            position++
-            requestAnimationFrame(moveBlock) // рекурсия
+        const maxX = parent.clientWidth - child.clientWidth
+        const maxY = parent.clientHeight - child.clientHeight
+
+        if (direction === 'right') {
+            x++
+            if (x >= maxX) direction = 'down'
         }
+        else if (direction === 'down') {
+            y++
+            if (y >= maxY) direction = 'left'
+        }
+        else if (direction === 'left') {
+            x--
+            if (x <= 0) direction = 'up'
+        }
+        else if (direction === 'up') {
+            y--
+            if (y <= 0) return //
+        }
+
+        child.style.left = x + 'px'
+        child.style.top = y + 'px'
+
+        requestAnimationFrame(moveBlock) // рекурсия
     }
 
     moveBlock()
+})
+const seconds = document.querySelector('#seconds')
+const startBtn = document.querySelector('#start')
+const stopBtn = document.querySelector('#stop')
+const resetBtn = document.querySelector('#reset')
+
+let counter = 0
+let interval = null
+
+startBtn.addEventListener('click', () => {
+    if (interval !== null) return
+
+    interval = setInterval(() => {
+        counter++
+        seconds.textContent = counter
+    }, 1000)
+})
+
+stopBtn.addEventListener('click', () => {
+    clearInterval(interval)
+    interval = null
+})
+
+resetBtn.addEventListener('click', () => {
+    clearInterval(interval)
+    interval = null
+    counter = 0
+    seconds.textContent = counter
 })
